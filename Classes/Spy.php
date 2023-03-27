@@ -17,7 +17,7 @@
         }
 
         //Getters
-        public function getAgentList(){
+        public function getAgentsList(){
             return $this->agentsList;
         }
 
@@ -32,17 +32,28 @@
         }
 
         public function getAgent(int $agentId): Agent{
-            //Con array_filter obtengo un array con los objetos que cumplen la función anónima que uso de filtro, en este caso obtendré un array con el agente que tiene el id recibido como parametro
-            //Uso el [0] para devolver el objeto y no el array
-            return array_filter($this->agentsList, function($m) use ($agentId) {
-                return $m->getAgentId() == $agentId;
-            })[0];
+            foreach($this->agentsList as $agent){
+                if($agent->getAgentId()==$agentId){
+                    return $agent;
+                }
+            };
         }
-
-        public function drawAgentsList(): String{
-            $agentList = '';
-            foreach($this->$agentList as $agent){
-                
+        //Método para devolver una array con los agentes inactivos o activos
+        public function statusFilter(String $status): array{
+            $result = array();
+            $status = $status == 'Active' ? TRUE : FALSE;
+            //Recorro la lista de agentes y relleno un array con los agentes que tienen el mismo status que el recibido 
+            foreach($this->agentsList as $agent){
+                if($agent->status==$status){
+                    $result[] = $agent;
+                }
+            }
+            return $result;
+        }
+        //Método para rellenar la lista de misiones de cada agente mediante un csv
+        public function fillAgentsMissions(String $file): void{
+            foreach($this->agentsList as $agent){
+                $agent->importMissions($file);
             }
         }
 

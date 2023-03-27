@@ -24,7 +24,17 @@
 
 
 <body>
-
+	<?php
+		include 'Functions/functions.php';
+		//Creo el objeto Spy con todo lo necesario
+		use Classes\Spy;
+		spl_autoload_register(function($class){
+			require_once str_replace('\\', '/',$class) . '.php';
+		 });
+		$Spy = new Spy();
+		$Spy->importAgents("agents.csv");
+		$Spy->fillAgentsMissions("missions.csv");
+	?>
 	<div id="site-content">
 
 		<header class="site-header">
@@ -60,30 +70,16 @@
 						</div>
 						<div class="col-md-4">
 							<div class="hero-content">
-								<h1 class="hero-title">Undercover Agents</h1>
-								<p>Please, select the status you wish to see from our agents. By default, Inactive status is shown:</p>
-								<form action="" method="post">
-									<select name="status">
-										<option value="Inactive" selected>Inactive</option>
-										<option value="Active" >Active</option>
-									</select>
-									<button type="submit"><img src="images/arrow@2x.png" alt=""></button>
-								</form>
-							</div>
+								<h1 class="hero-title">Agent <?php echo $_GET["id"]?>'s missions</h1>
+							<ul><?php	
+								//Uso la función para crear la lista de misiones del agente con el id obtenido por la url
+		 						createMissionList($Spy->getAgent(intval($_GET["id"]))->getMissionList())
+							?></ul></div>
+							<span id="back"><a href='index.php'>Back</a></span>
 						</div>
 					</div>
 				</div>
 			</div> <!-- .hero-slider -->
-
-			<div class="fullwidth-block" data-bg-color="#111113">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-8">
-							<h2>Inactive agent's list</h2>
-							<ul><li class='list-item'><a href='missions.php?id=110'>Drake Jenkins</a></li><li class='list-item'><a href='missions.php?id=113'>Jeanette Franklin</a></li><li class='list-item'><a href='missions.php?id=101'>Christopher Beach</a></li><li class='list-item'><a href='missions.php?id=108'>Kerry Wolf</a></li><li class='list-item'><a href='missions.php?id=103'>Alana Farley</a></li><li class='list-item'><a href='missions.php?id=119'>Jakeem Booker</a></li><li class='list-item'><a href='missions.php?id=107'>Quinlan Sparks</a></li><li class='list-item'><a href='missions.php?id=112'>Echo Carlson</a></li></ul>						</div>
-					</div> <!-- .row -->
-				</div> <!-- .container -->
-			</div> <!-- .fullwidth-block -->
 
 		</main> <!-- .main-content -->
 

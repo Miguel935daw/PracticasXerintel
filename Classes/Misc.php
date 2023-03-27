@@ -6,7 +6,6 @@
     class Misc{
         public function importFile(string $csv): Array{
             //Array vacío que será rellenado con arrays con el id, el nombre y el estado de cada agente del csv
-            include($csv);
             $list = [];
             $file = fopen($csv, "r");
             //De cada línea hago un array con los campos separados

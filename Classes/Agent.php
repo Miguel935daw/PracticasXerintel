@@ -63,22 +63,21 @@
       }
 
       public function getMission(int $missionId): Mission{
-         //Con array_filter obtengo un array con los objetos que cumplen la función anónima que uso de filtro, en este caso obtendré un array con la misión que tiene el id recibido como parametro
-         //Uso el [0] para devolver el objeto y no el array
-         return array_filter($this->missionList, function($m) use ($missionId) {
-            return $m->missionId == $missionId;
-         })[0];
+         foreach($this->missionsList as $mission){
+            if($mission->getMissionId()==$missionId){
+                return $mission;
+            }
+        };
       }
 
-      public function drawMissionsList(): void{
-         
-      }
-
-      //Método para rellenar la lista de misiones desde un csv, creando un objeto Mission con cada linea del csv, y añadiendolo a missionList
+      //Método para rellenar la lista de misiones desde un csv, creando un objeto Mission con cada linea del csv, y añadiendolo a missionList en caso de que la misión corresponda al agente
       public function importMissions(string $file): void{
          $missions = $this->importFile($file);
          foreach($missions as $mission){
-            $this->addMission(new Mission(intval($mission[0]),$mission[1],$mission[2],$mission[3]));
+            if($this->agentId == intval($mission[0])){
+               $this->addMission(new Mission(intval($mission[0]),$mission[1],$mission[2],$mission[3]));
+            }
+            
          }
       }
 

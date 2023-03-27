@@ -35,7 +35,7 @@
         }
 
         public function getDate(){
-            return $this->date;
+            return $this->toDate();
         }
 
         public function getMissionName(){

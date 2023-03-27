@@ -24,7 +24,17 @@
 
 
 <body>
-
+	<?php
+		include 'Functions/functions.php';
+		//Creo el objeto Spy con todo lo necesario
+		use Classes\Spy;
+		spl_autoload_register(function($class){
+			require_once str_replace('\\', '/',$class) . '.php';
+		 });
+		$Spy = new Spy();
+		$Spy->importAgents("agents.csv");
+		$Spy->fillAgentsMissions("missions.csv");	
+	?>
 	<div id="site-content">
 
 		<header class="site-header">
@@ -60,13 +70,36 @@
 						</div>
 						<div class="col-md-4">
 							<div class="hero-content">
-								<h1 class="hero-title">Agent 119's missions</h1>
-							<ul><li class='list-item'>ULTRICIES LIGULA Op, Indonesia, completed at May 4, 2021</li><li class='list-item'>SEM NULLA Op, Christmas Island, completed at July 9, 2021</li><li class='list-item'>ORCI LOBORTIS Op, Vanuatu, completed at May 26, 2021</li><li class='list-item'>INTEGER IN Op, Gambia, completed at August 16, 2021</li></ul>							</div>
-							<span id="back"><a href='index.php'>Back</a></span>
+								<h1 class="hero-title">Undercover Agents</h1>
+								<p>Please, select the status you wish to see from our agents. By default, Inactive status is shown:</p>
+								<form action="index.php" method="post">
+									<select name="status">
+										<option value="Inactive" selected>Inactive</option>
+										<option value="Active" >Active</option>
+									</select>
+									<button type="submit"><img src="images/arrow@2x.png" alt=""></button>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div> <!-- .hero-slider -->
+
+			<div class="fullwidth-block" data-bg-color="#111113">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-8">
+							<!-- Ternaria para en caso de que se envíe el formulario, aparezca el estado de los agentes según la opción elegida -->
+							<h2><?php echo !isset($_POST["status"]) ? "Inactive" : $_POST["status"];?> agent's list</h2>
+							<ul>
+								<?php
+									//Uso la funcion para crear la lista de enlaces según la opción seleccionada en el formulario
+									createAgentList($Spy->getAgentsList(),!isset($_POST["status"]) ? "Inactive" : $_POST["status"]);
+								?>
+							</li></ul></div>
+					</div> <!-- .row -->
+				</div> <!-- .container -->
+			</div> <!-- .fullwidth-block -->
 
 		</main> <!-- .main-content -->
 
